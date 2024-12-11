@@ -1,0 +1,12 @@
+# Use an Nginx base image to serve static files
+FROM nginx:alpine
+
+# Copy the static frontend files into the appropriate Nginx directory
+COPY ./static /usr/share/nginx/html
+
+# Expose port 80 to allow web traffic
+EXPOSE 80
+
+# Default command to run Nginx
+CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "start"]

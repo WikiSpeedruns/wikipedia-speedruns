@@ -14,6 +14,7 @@ import argparse
 import os
 
 DEFAULT_DB_NAME='wikipedia_speedruns'
+docker_fp = "/app/config/default.json"
 
 def populate_sprints(cursor):
     # Create a bunch of daily prompts of the form '[n] (number)' -> '[n + 1] (number)'
@@ -380,15 +381,15 @@ def populate_quick_runs(cursor):
 
 def populate_database(db_name, recreate=False):
     # Load database settings from
-    config = json.load(open("../config/default.json"))
+    config = json.load(open(docker_fp))
     try:
-        config.update(json.load(open("../config/prod.json")))
+        config.update(json.load(open(docker_fp)))
     except FileNotFoundError:
         pass
 
     conn = pymysql.connect(
         user=config["MYSQL_USER"],
-        host=config["MYSQL_HOST"],
+        host="mysql",  # Use the MySQL service name here
         password=config["MYSQL_PASSWORD"],
         database=db_name
     )

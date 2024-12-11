@@ -1,0 +1,28 @@
+services:
+  # MySQL database container
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: testpassword
+      MYSQL_DATABASE: wikipedia_speedruns
+    command:
+      - --mysql-native-password=ON
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  # Backend service (Flask server)
+  backend:
+    build: .
+    environment:
+      FLASK_ENV: development
+      FLASK_APP: app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mysql
+volumes:
+  mysql-data:

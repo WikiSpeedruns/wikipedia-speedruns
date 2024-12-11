@@ -1,4 +1,3 @@
-
 import json
 import pymysql
 
@@ -10,12 +9,15 @@ from getpass import getpass
 
 import bcrypt
 
+
+docker_fp = "/app/config/default.json"
+
 def create_admin_account():
-    config = json.load(open('../config/default.json'))
+    config = json.load(open(docker_fp))
 
     # load prod settings if they exist
     try:
-        config.update(json.load(open('../config/prod.json')))
+        config.update(json.load(open(docker_fp)))
     except FileNotFoundError:
         pass
 
@@ -39,10 +41,10 @@ def create_admin_account():
     query = "INSERT INTO `users` (`username`, `hash`, `email`, `email_confirmed`, `admin`, `join_date`) VALUES (%s, %s, %s, %s, %s, %s)"
 
     db = pymysql.connect(
-            user=config["MYSQL_USER"],
-            host=config["MYSQL_HOST"],
-            password=config["MYSQL_PASSWORD"],
-            database=config['DATABASE']
+    user=config["MYSQL_USER"],
+    host=config["MYSQL_HOST"],
+    password=config["MYSQL_PASSWORD"],
+    database=config['DATABASE']
     )
 
     with db.cursor() as cursor:

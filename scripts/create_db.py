@@ -6,12 +6,16 @@ import os
 
 DEFAULT_DB_NAME='wikipedia_speedruns'
 
+docker_fp = "/app/config/default.json"
 
 def create_database(db_name, recreate=False, test_config=None):
     # Load database settings from
-    config = json.load(open("../config/default.json"))
+    # config = json.load(open("../config/default.json"))
+    config = json.load(open(docker_fp))
+    print(config)
     try:
-        config.update(json.load(open("../config/prod.json")))
+        # config.update(json.load(open("../config/prod.json")))
+        config.update(json.load(open(docker_fp)))
     except FileNotFoundError:
         pass
 
@@ -23,6 +27,7 @@ def create_database(db_name, recreate=False, test_config=None):
         host=config["MYSQL_HOST"],
         password=config["MYSQL_PASSWORD"],
     )
+
 
     with conn.cursor() as cursor:
         if (recreate):
